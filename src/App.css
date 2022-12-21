@@ -1,12 +1,114 @@
 .App {
+  width: 100vw;
+  height: 100vh;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
+.formus{
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.registro{
+  background-color: rgb(107, 184, 184);
+  margin-left: 10px;
+  border-radius:10px;
+  width: 40%;
+  height: 90%;
+  box-shadow: 0px 10px 15px black;
+}
+input{
+  margin:10px 20px;
+  border: none;
+  padding:5px;
+  border-radius:10px;
+  margin-top: 10px;
+}
+label{
+  margin-left: 30px;
+  
+}
+button{
+  padding:10px;
+  border: none;
+  border-radius:30px;
+  margin-top:10px;
+  background-color:gray;
+  color:white;
+  box-shadow: 0px 5px 10px black;
+  margin-bottom: 20px;
+}
+.formulario{
+  width:40%;
+  height:90%;
+  margin-left: 40px;
+  background-color: paleturquoise;
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0px 10px 15px black;
+}
+.btn{
+  margin-left: 10px;
+}
+.tablas{
+  width:100%;
+  height:50vh;
+  background-color:rgb(65, 65, 202);
+}
+table{
+  margin:auto;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+th{
+  border: 1px solid black;
+  background-color: #61dafb;
+}
+td{
+  border: 1px solid black;
+  background-color: white;
+}
+td.totales{
+  background-color: #4ebfdf;
+}
+.header{
+  background-color: rgb(65, 65, 202);
+  color: white;
+}
+section.btnRegistro{
+  width: 100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+h1.reg{
+  margin: 0;
+  margin-top:70px;
+  font-size: 30px;
+}
+.tituloRegistro{
+  width: 100%;
+  height: 50px;
+}
+.btnFormulario{
+  margin: auto;
+}
+h3{
+  color: white;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
