@@ -3,9 +3,11 @@ import "./App.css";
 
 export const Header = () => {
     return (
-        <div className="header">
-            <h1>SOFTWARE CONTABLE</h1>
+        <div className="headerr">
+            <section className="header2">
+                <h1 className="header">SOFTWARE CONTABLE</h1>
+            </section>
         </div>
-    )
+    );
 }
 export default Header;
