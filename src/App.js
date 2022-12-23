@@ -19,7 +19,7 @@ function App() {
   const [movimientoDebito, setMovimientoDebito] = useState(0); //TOTAL MOVIMIENTO DEBITO
   const [movimientoCredito, setMovimientoCredito] = useState(0); //TOTAL MOVIMIENTO CREDITO
   const [saldoAnterior, setSaldoAnterior] = useState(0); //SALDO ANTERIOR
-  const [saldoActual, setSaldoActual] = useState(saldoAnterior); //SALDO ACTUAL
+  const [saldoActual, setSaldoActual] = useState(0); //SALDO ACTUAL
   const [movimientoGeneral, setMovimientoGeneral] = useState(false); //VENTANA MOVIMIENTO GENERAL
   const [arrayMovimientoGeneral, setArrayMovimientoGeneral] = useState([]);//ARRAY MOVIMIENTO GENERAL
 
@@ -51,6 +51,7 @@ function App() {
       ...arrayDocumento,
       {
         doc: e.target.doc.value,
+        tipoDoc: e.target.tipoDoc.value,
         id: e.target.id.value,
         cedula: e.target.cedula.value,
         cuenta: cuenta,
@@ -96,8 +97,11 @@ function App() {
     for (let i = 0; i < arrayDocumento.length; i++) {
       array.push({
         doc: arrayDocumento[i].doc,
+        tipoDoc: arrayDocumento[i].tipoDoc,
         id: arrayDocumento[i].id,
+        cedula: arrayDocumento[i].cedula,
         cuenta: arrayDocumento[i].cuenta,
+        detalles: arrayDocumento[i].detalles,
         debito: arrayDocumento[i].debito,
         credito: arrayDocumento[i].credito,
         fecha: arrayDocumento[i].fecha,
@@ -172,29 +176,26 @@ function App() {
     setArrayMovimiento(arrayTemporal);
 
     /*  ========================FILTRA SALDO ANTERIOR===================================*/
-    let saldoAnterior = 0;
+    let valorSaldoAnterior = 0;
     let arraySaldoAnterior = arrayIngreso.filter(
-      (item) => item.fecha < e.target.fechaInicial.value
+      (item) => item.fecha < e.target.fechaInicial.value && e.target.idmovimiento.value == item.id
     );
     if (arraySaldoAnterior.length > 0) {
       for (let i = 0; i < arraySaldoAnterior.length; i++) {
-        saldoAnterior =
-          saldoAnterior +
+        valorSaldoAnterior =
+          valorSaldoAnterior +
           parseFloat(arraySaldoAnterior[i].debito) -
           parseFloat(arraySaldoAnterior[i].credito);
       }
     }
-    setSaldoAnterior(saldoAnterior);
+    setSaldoAnterior(valorSaldoAnterior);
 
     /*  ========================FILTRA SALDO ACTUAL===================================*/
-    let saldoActual = 0;
-    for (let i = 0; i < arrayMovimiento; i++) {
-      saldoActual =
-        saldoAnterior +
-        parseFloat(arrayMovimiento[i].debito) -
-        parseFloat(arrayMovimiento[i].credito);
+    let valorSaldoActual = 0;
+    for (let i = 0; i < arrayMovimiento.length; i++) {
+      valorSaldoActual = valorSaldoActual + parseFloat(arrayMovimiento[i].debito) - parseFloat(arrayMovimiento[i].credito);
     }
-    setSaldoActual(parseFloat(saldoActual));
+    setSaldoActual(valorSaldoActual+saldoAnterior);
 
     /*  ========================DESPLIEGA VENTANA DE MOVIMIENTO DE CUENTA===================================*/
     if (ventanaMovimiento) {
@@ -234,6 +235,7 @@ function App() {
       setMovimientoGeneral(true);
     }
   };
+
 
   /*  ========================INICIA===================================*/
   return (
@@ -291,6 +293,15 @@ function App() {
                 type="text"
                 name="doc"
                 placeholder="Ingresa el codigo"
+              ></input>
+            </label>
+            <label>
+              TIPO DE DOC
+              <input
+                type="text"
+                name="tipoDoc"
+                placeholder="
+            ingresa tipo de documento"
               ></input>
             </label>
             <label>
@@ -401,25 +412,35 @@ function App() {
             <thead>
               <tr>
                 <th>DOC</th>
+                <th>TIPO DOC</th>
+                <th>FECHA</th>
                 <th>ID CUENTA</th>
+                <th>CEDULA</th>
                 <th>NOMBRE CUENTA</th>
+                <th>DETALLES</th>
                 <th>DEBITO</th>
                 <th>CREDITO</th>
-                <th>FECHA</th>
               </tr>
             </thead>
             <tbody>
               {arrayDocumento.map((documento, i) => (
                 <tr key={i}>
                   <td>{documento.doc}</td>
+                  <td>{documento.tipoDoc}</td>
+                  <td>{documento.fecha}</td>
                   <td>{documento.id}</td>
+                  <td>{documento.cedula}</td>
                   <td>{documento.cuenta}</td>
+                  <td>{documento.detalles}</td>
                   <td>{documento.debito}</td>
                   <td>{documento.credito}</td>
-                  <td>{documento.fecha}</td>
                 </tr>
               ))}
               <tr>
+                <td className="totales"></td>
+                <td className="totales"></td>
+                <td className="totales"></td>
+                <td className="totales"></td>
                 <td className="totales"></td>
                 <td className="totales"></td>
                 <td className="totales">
@@ -431,7 +452,6 @@ function App() {
                 <td className="totales">
                   <b>{totalCredito}</b>
                 </td>
-                <td className="totales"></td>
               </tr>
             </tbody>
           </table>
@@ -490,6 +510,9 @@ function App() {
                   <td className="saldo"></td>
                   <td className="saldo"></td>
                   <td className="saldo"></td>
+                  <td className="saldo"></td>
+                  <td className="saldo"></td>
+                  <td className="saldo"></td>
                   <td className="saldo">
                     <b>SALDO ANTERIOR: ...</b>
                   </td>
@@ -497,9 +520,12 @@ function App() {
                 </tr>
                 <tr>
                   <th>DOC</th>
+                  <th>TIPO DOC</th>
                   <th>FECHA</th>
                   <th>ID CUENTA</th>
+                  <th>CEDULA</th>
                   <th>NOMBRE CUENTA</th>
+                  <th>DETALLES</th>
                   <th>DEBITO</th>
                   <th>CREDITO</th>
                 </tr>
@@ -508,14 +534,20 @@ function App() {
                 {arrayMovimiento.map((movimiento, i) => (
                   <tr key={i}>
                     <td>{movimiento.doc}</td>
+                    <td>{movimiento.tipoDoc}</td>
                     <td>{movimiento.fecha}</td>
                     <td>{movimiento.id}</td>
+                    <td>{movimiento.cedula}</td>
                     <td>{movimiento.cuenta}</td>
+                    <td>{movimiento.detalles}</td>
                     <td>{movimiento.debito}</td>
                     <td>{movimiento.credito}</td>
                   </tr>
                 ))}
                 <tr>
+                  <td className="totales"></td>
+                  <td className="totales"></td>
+                  <td className="totales"></td>
                   <td className="totales"></td>
                   <td className="totales"></td>
                   <td className="totales"></td>
@@ -530,6 +562,9 @@ function App() {
                   </td>
                 </tr>
                 <tr>
+                  <td className="saldo"></td>
+                  <td className="saldo"></td>
+                  <td className="saldo"></td>
                   <td className="saldo"></td>
                   <td className="saldo"></td>
                   <td className="saldo"></td>
@@ -551,8 +586,9 @@ function App() {
               <thead>
                 <tr>
                   <th>DOC</th>
+                  <th>TIPO DOC</th>
                   <th>FECHA</th>
-                  <th>ID</th>
+                  <th>ID CUENTA</th>
                   <th>CEDULA</th>
                   <th>CUENTA</th>
                   <th>DETALLES</th>
@@ -563,9 +599,10 @@ function App() {
               {arrayMovimientoGeneral.map((general, i) => (
                 <tr key={i}>
                   <td>{general.doc} </td>
+                  <td>{general.tipoDoc} </td>
                   <td>{general.fecha} </td>
                   <td>{general.id} </td>
-                  <td>{general.cedulada}</td>
+                  <td>{general.cedula}</td>
                   <td>{general.cuenta} </td>
                   <td>{general.detalles} </td>
                   <td>{general.debito} </td>
